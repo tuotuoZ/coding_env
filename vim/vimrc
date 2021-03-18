@@ -1,0 +1,175 @@
+""""""""""""""""""""""""""""""system required""""""""""""""""""""""""
+set nocompatible               " be iMproved
+"filetype off                   " required!
+
+"""""""""""""""""""""""""""""""""init"""""""""""""""""""""""""""""""
+set autoindent
+" 自动对齐
+set smartindent
+" 智能对齐
+set cindent
+" 用c语言模式自动缩进
+set number
+" 显示行号
+set tabstop=4
+" Tab键的宽度
+set softtabstop=4
+set shiftwidth=4
+"  统一缩进为4
+set noexpandtab
+" normal backspace performance
+set backspace=2
+" 不要用空格代替制表符
+syntax on
+" 语法高亮
+set showmatch
+" 高亮显示对应的括号
+set incsearch
+" 增量搜索
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set encoding=utf-8
+" 编码设置
+filetype plugin indent on    
+" 检测文件类型及缩进，required for bundle
+colorscheme jellybeans
+" 设置配色，已转移至$VIM/vim/vimrc 
+set guifont=Menlo:h20
+" 设置字体
+autocmd InsertLeave * se nocul
+autocmd InsertEnter * se cul
+" 用浅色高亮当前行
+" set foldmethod=indent
+" 打开折叠，method还有marker可选，用{}折叠
+set langmenu=zn_CN.UTF-8
+set helplang=cn
+" 语言设置
+set gcr=a:block-blinkon0
+" 设置光标不闪烁
+let mapleader = "," 
+let g:mapleader = "," 
+" 设置<leader>命令符
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+set vb t_vb=  "close the bell"
+" 关闭响铃
+set wildmenu
+" 横向菜单
+set foldcolumn=1
+" More space on the left
+set mouse=a
+" Use Mouse, auto enter visual mode
+set clipboard=unnamed
+" y 复制到系统剪切版
+"set shellcmdflag=-ic
+" Use interactive shell allow python run
+
+""""""""""""""""""""自定义的键映射"""""""""""""""""""""
+"<CR> for enter key
+" shift-u for redo
+
+nmap U :redo <CR>
+nmap <C-R> :call CompileRun()<CR>
+
+function CompileRun()
+	exec "w"
+	if &filetype=='cpp'
+		exec "!g++ % -o a"
+		exec "!./a"
+	endif
+	" help python3
+	if &filetype=='python'
+		" Cannot actually use alias in zshrc
+		exec "!/usr/local/bin/python3 %"
+	endif
+	if &filetype=='java'
+		exec "!javac %" 
+		exec "!java %<"
+	endif
+endfunction
+" <C-R>(编译和)运行C/C++程序 , 可输入sh进入bash模式
+" :h keycodes can view special key code 
+
+"inoremap ( ()<ESC>i
+"inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+"inoremap < <><ESC>i
+" 括号补全
+" nnoremap <space> za
+" 用空格代替za折叠
+
+""""""""""""""""""""""""""""""""""about Bundle""""""""""""""""""""""""
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#rc()
+" let Vundle manage Vundle
+" required!
+Bundle 'VundleVim/Vundle.vim'
+" fugitive : git wrapper, required for vundle
+Bundle 'tpope/vim-fugitive'
+"L9 : autocomplete library, must install if FuzzyFinder 
+Bundle 'L9'
+
+" FuzzyFinder : view finder
+Bundle 'FuzzyFinder'
+
+Bundle 'http://github.com/Lokaltog/vim-powerline.git'
+" Use tab as C-N C-P keyword complete
+Bundle 'http://github.com/ervandew/supertab'
+
+Bundle 'junegunn/goyo.vim'
+
+Bundle 'junegunn/limelight.vim'
+
+" Python PEP8 syntax check
+" Fn+ <f7> to use
+Bundle 'https://github.com/nvie/vim-flake8'
+
+Bundle 'JamshedVesuna/vim-markdown-preview'
+"Render markdown as html
+
+
+" Provide python completion
+" Bundle 'davidhalter/jedi-vim' 
+
+" YCM Still not usable for c++ consider clang not working 
+" Bundle 'https://github.com/Valloric/YouCompleteMe'
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+
+""""""""""""""""""""""""""""""""All Plugin Setting""""""""""""""""""""""""""""""""""
+" vim powerline 插件
+set laststatus=2
+set t_co=256
+let g:Powerline_symbols='unicode'
+set encoding=utf-8
+
+" Limelight Config
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+
+" YouCompleteMe Config
+let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
+set completeopt=menu,menuone "关闭自动弹出的窗口
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings=1
+let g:ycm_key_invoke_completion = '<c-y>'
+set completeopt=menu,menuone
+let g:ycm_semantic_triggers =  {
+            \ 'python,java,go,erlang,perl': ['re!\w{2}'],
+            \ 'cs,lua,javascript': ['re!\w{2}'],
+            \ }
+
+" Vim Markdown Preview Config
+let vim_markdown_preview_github=1
